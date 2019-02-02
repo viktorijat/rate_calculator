@@ -1,11 +1,19 @@
 package com.rates.calculator.ratescalculator.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Quote {
 
     private Double requestedAmount;
     private Double rate;
     private Double monthlyRepayment;
     private Double totalRepayment;
+
+    @Value("${numberOfDecimals}")
+    private Integer numberOfDecimals;
 
     public Quote(Double requestedAmount, Double rate, Double monthlyRepayment, Double totalRepayment) {
         this.requestedAmount = requestedAmount;
@@ -32,9 +40,10 @@ public class Quote {
 
     @Override
     public String toString() {
-        return "Requested Amount: " + requestedAmount + "\n" +
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.UK);
+        return "Requested Amount: " + currencyFormatter.format(requestedAmount) + "\n" +
                 "Rate: " + rate + "\n" +
-                "Monthly Repayment: " + monthlyRepayment + "\n" +
-                "Total Repayment: " + totalRepayment;
+                "Monthly Repayment: " + currencyFormatter.format(monthlyRepayment) + "\n" +
+                "Total Repayment: " + currencyFormatter.format(totalRepayment);
     }
 }

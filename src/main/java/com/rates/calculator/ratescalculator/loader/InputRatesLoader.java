@@ -6,6 +6,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface InputRatesLoader {
-
     List<Lender> loadLenderRates(String fileName) throws IOException;
 }
