@@ -2,8 +2,11 @@ package com.rates.calculator.ratescalculator.model;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Quote {
 
@@ -40,7 +43,25 @@ public class Quote {
 
     @Override
     public String toString() {
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.UK);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
+        String language = resourceBundle.getString("locale.language");
+        String country = resourceBundle.getString("locale.country");
+        Locale locale = new Locale("en");
+        System.out.println(locale);
+        Locale uk = Locale.UK;
+
+        Locale a = new Locale.Builder().setRegion("en").setLanguage("UK").build();
+
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        Currency usd = Currency.getInstance(Locale.UK);
+        currencyFormatter.setCurrency(usd);
+
+        String symbol = usd.getSymbol(locale);
+        System.out.println("Currency symbol is = " + symbol);
+
+        //Locale l1 =
+
         return "Requested Amount: " + currencyFormatter.format(requestedAmount) + "\n" +
                 "Rate: " + rate + "\n" +
                 "Monthly Repayment: " + currencyFormatter.format(monthlyRepayment) + "\n" +
