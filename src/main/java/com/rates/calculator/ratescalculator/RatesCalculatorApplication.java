@@ -1,37 +1,30 @@
 package com.rates.calculator.ratescalculator;
 
-import com.rates.calculator.ratescalculator.calculator.RateCalculator;
-import com.rates.calculator.ratescalculator.loader.CsvRatesLoader;
-import com.rates.calculator.ratescalculator.loader.InputRatesLoader;
-import com.rates.calculator.ratescalculator.model.Lender;
-import java.io.IOException;
-import java.util.List;
+import com.rates.calculator.ratescalculator.model.Quote;
+import com.rates.calculator.ratescalculator.processor.RateProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.io.IOException;
 
 @SpringBootApplication
 public class RatesCalculatorApplication {
 
-	public static void main(String[] args) throws IOException {
-		SpringApplication.run(RatesCalculatorApplication.class, args);
+    private static RateProcessor rateProcessor;
+    private static Logger logger = LoggerFactory.getLogger(RatesCalculatorApplication.class);
 
+    @Autowired
+    public RatesCalculatorApplication(RateProcessor rateProcessor) {
+        RatesCalculatorApplication.rateProcessor = rateProcessor;
+    }
 
-        InputRatesLoader inputRatesLoader = new CsvRatesLoader();
-        List<Lender> lenders = inputRatesLoader.loadLenderRates();
-
-        for (Lender l : lenders) {
-            System.out.println(l);
-        }
-
-        System.out.println("---------");
-
-        Integer requestedAmount = 1000;
-
-        RateCalculator r = new RateCalculator();
-
-        List<Lender> collectedLenders = r.findLendersWithEnoughMoney(lenders);
-
-	}
-
+    public static void main(String[] args) throws IOException {
+        SpringApplication.run(RatesCalculatorApplication.class, args);
+        Quote quote = rateProcessor.findRateForLoan(args);
+        logger.info("\n" + quote.toString());
+    }
 }
 

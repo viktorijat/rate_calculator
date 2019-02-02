@@ -1,26 +1,29 @@
 package com.rates.calculator.ratescalculator.loader;
 
 import com.rates.calculator.ratescalculator.model.Lender;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class CsvRatesLoader implements InputRatesLoader {
 
+    private static final String SPLITTER = ",";
 
     @Override
-    public List<Lender> loadLenderRates() throws IOException {
+    public List<Lender> loadLenderRates(String fileName) throws IOException {
 
-        List<Lender> xmlLines = new BufferedReader(new FileReader("markets.csv"))
+        return new BufferedReader(new FileReader(fileName))
                 .lines()
-                .skip(1) //Skips the first n lines, in this case 1
+                .skip(1)
                 .map(s -> {
-                    String[] values = s.split(",");
-                    return new Lender(values[0], Double.valueOf(values[1]), Integer.parseInt(values[2]));
+                    String[] values = s.split(SPLITTER);
+                    return new Lender(values[0], Double.valueOf(values[1]), Double.valueOf(values[2]));
                 })
                 .collect(Collectors.toList());
-        return xmlLines;
     }
 }

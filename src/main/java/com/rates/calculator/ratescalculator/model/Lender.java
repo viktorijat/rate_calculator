@@ -6,9 +6,9 @@ public class Lender {
 
     private String name;
     private Double rate;
-    private Integer available;
+    private Double available;
 
-    public Lender(String name, Double rate, Integer available) {
+    public Lender(String name, Double rate, Double available) {
         this.name = name;
         this.rate = rate;
         this.available = available;
@@ -18,24 +18,12 @@ public class Lender {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Double getRate() {
         return rate;
     }
 
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
-
-    public Integer getAvailable() {
+    public Double getAvailable() {
         return available;
-    }
-
-    public void setAvailable(Integer available) {
-        this.available = available;
     }
 
     @Override
