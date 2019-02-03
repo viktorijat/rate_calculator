@@ -3,7 +3,6 @@ package com.rates.calculator.ratescalculator.processor;
 import com.rates.calculator.ratescalculator.RatesCalculatorApplication;
 import com.rates.calculator.ratescalculator.calculator.FundsFinder;
 import com.rates.calculator.ratescalculator.calculator.RateCalculator;
-import com.rates.calculator.ratescalculator.calculator.RateMethod;
 import com.rates.calculator.ratescalculator.loader.InputRatesLoader;
 import com.rates.calculator.ratescalculator.model.Lender;
 import com.rates.calculator.ratescalculator.model.Quote;
@@ -34,6 +33,9 @@ public class RateProcessor {
 
     @Value("${periodOfTime}")
     private Integer periodOfTime;
+
+    @Value("${loan_formula}")
+    private String loan_formula;
 
     @Autowired
     private InputRatesLoader inputRatesLoader;
@@ -78,7 +80,7 @@ public class RateProcessor {
         List<Double> monthly = new ArrayList<>();
         for (Lender lender : collectedLenders) {
             monthly.add(rateCalculator.calculateRate(lender.getAvailable(), lender.getRate(),
-                    RateMethod.ECONOMICS_BOOK.name()));
+                    loan_formula));
         }
         return monthly;
     }

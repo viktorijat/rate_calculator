@@ -17,10 +17,8 @@ public class RateCalculator {
             return loanForm1728(sum, percentage);
         } else if (method.equals(RateMethod.WIKI_HOW.name())) {
             return loanWikiHow(sum, percentage);
-        } else if (method.equals(RateMethod.ECONOMICS_BOOK.name())) {
-            return economicsBookRateCalculator(sum, percentage);
         }
-        return 0.0;
+        return economicsBookRateCalculator(sum, percentage);
     }
 
     /*
@@ -38,16 +36,15 @@ public class RateCalculator {
 
         double up = rate * Math.pow((1 + rate), period);
         double down = Math.pow((1 + rate), period) - 1;
-        double suma = sum * up / down;
-        System.out.println("SUMA: " + suma);
-        return suma;
+        return sum * up / down;
     }
 
     /*
         Rate calculation formula as found on http://www.1728.org/loanform.htm
      */
     private Double loanForm1728(Double sum, Double percentage) {
-        return (percentage + (percentage / (Math.pow((1 + percentage), period) - 1))) * sum;
+        double down = Math.pow((1 + percentage), period) - 1;
+        return (percentage + (percentage / down)) * sum;
     }
 
     /*

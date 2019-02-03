@@ -37,5 +37,10 @@ public class QuoteControllerTest {
         assertThat(received.get(0).getRate(), is(0.02));
         assertThat(received.get(0).getMonthlyRepayment(), is(3.00));
         assertThat(received.get(0).getTotalRepayment(), is(4.00));
+
+        assertThat(received.get(0).toString(), is("Requested Amount: £1.00\n" +
+                "Rate: 2%\n" +
+                "Monthly Repayment: £3.00\n" +
+                "Total Repayment: £4.00"));
     }
 }
