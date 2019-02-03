@@ -1,12 +1,13 @@
 package com.rates.calculator.ratescalculator.calculator;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RateCalculator {
 
-
-    private static final int PERIOD = 36;
+    @Value("${periodOfTime}")
+    private Double period;
 
     public Double calculateRate(Double sum, Double percentage, String method) {
 
@@ -27,7 +28,7 @@ public class RateCalculator {
      */
     private Double economicsBookRateCalculator(Double sum, Double percentage) {
         double up = sum * percentage + sum;
-        return up / PERIOD;
+        return up / period;
     }
 
     /*
@@ -35,8 +36,8 @@ public class RateCalculator {
      */
     private Double loanWikiHow(Double sum, Double rate) {
 
-        double up = rate * Math.pow((1 + rate), PERIOD);
-        double down = Math.pow((1 + rate), PERIOD) - 1;
+        double up = rate * Math.pow((1 + rate), period);
+        double down = Math.pow((1 + rate), period) - 1;
         double suma = sum * up / down;
         System.out.println("SUMA: " + suma);
         return suma;
@@ -46,14 +47,13 @@ public class RateCalculator {
         Rate calculation formula as found on http://www.1728.org/loanform.htm
      */
     private Double loanForm1728(Double sum, Double percentage) {
-        return (percentage + (percentage / (Math.pow((1 + percentage), PERIOD) - 1))) * sum;
+        return (percentage + (percentage / (Math.pow((1 + percentage), period) - 1))) * sum;
     }
 
     /*
         Rate calculation formula as found on http://financeformulas.net/Loan_Payment_Formula.html
      */
     private Double financeFormulasCalculator(Double sum, Double percentage) {
-        return (percentage * sum) / (1 - Math.pow((1 + percentage), -PERIOD));
+        return (percentage * sum) / (1 - Math.pow((1 + percentage), -period));
     }
-
 }

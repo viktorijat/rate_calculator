@@ -2,6 +2,7 @@ package com.rates.calculator.ratescalculator.loader;
 
 import com.rates.calculator.ratescalculator.model.Lender;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Service
 public class CsvRatesLoader implements InputRatesLoader {
 
     private static final String SPLITTER = ",";

@@ -1,12 +1,6 @@
 package com.rates.calculator.ratescalculator.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Currency;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import com.rates.calculator.ratescalculator.model.formater.NumberFormatter;
 
 public class Quote {
 
@@ -14,9 +8,6 @@ public class Quote {
     private Double rate;
     private Double monthlyRepayment;
     private Double totalRepayment;
-
-    @Value("${numberOfDecimals}")
-    private Integer numberOfDecimals;
 
     public Quote(Double requestedAmount, Double rate, Double monthlyRepayment, Double totalRepayment) {
         this.requestedAmount = requestedAmount;
@@ -41,30 +32,31 @@ public class Quote {
         this.totalRepayment = totalRepayment;
     }
 
+    public Double getRequestedAmount() {
+        return requestedAmount;
+    }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public Double getMonthlyRepayment() {
+        return monthlyRepayment;
+    }
+
+    public Double getTotalRepayment() {
+        return totalRepayment;
+    }
+
     @Override
     public String toString() {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
-        String language = resourceBundle.getString("locale.language");
-        String country = resourceBundle.getString("locale.country");
-        Locale locale = new Locale("en");
-        System.out.println(locale);
-        Locale uk = Locale.UK;
 
-        Locale a = new Locale.Builder().setRegion("en").setLanguage("UK").build();
 
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        Currency usd = Currency.getInstance(Locale.UK);
-        currencyFormatter.setCurrency(usd);
+        NumberFormatter numberFormat = NumberFormatter.getInstance();
 
-        String symbol = usd.getSymbol(locale);
-        System.out.println("Currency symbol is = " + symbol);
-
-        //Locale l1 =
-
-        return "Requested Amount: " + currencyFormatter.format(requestedAmount) + "\n" +
-                "Rate: " + rate + "\n" +
-                "Monthly Repayment: " + currencyFormatter.format(monthlyRepayment) + "\n" +
-                "Total Repayment: " + currencyFormatter.format(totalRepayment);
+        return "Requested Amount: " + numberFormat.getCurrencyFormatter().format(requestedAmount) + "\n" +
+                "Rate: " + numberFormat.getPercentageFormatter().format(rate) + "\n" +
+                "Monthly Repayment: " + numberFormat.getCurrencyFormatter().format(monthlyRepayment) + "\n" +
+                "Total Repayment: " + numberFormat.getCurrencyFormatter().format(totalRepayment);
     }
 }

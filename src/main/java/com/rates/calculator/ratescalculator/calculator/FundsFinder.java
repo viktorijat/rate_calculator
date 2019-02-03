@@ -13,39 +13,24 @@ public class FundsFinder {
 
     public List<Lender> findLendersWithEnoughMoney(List<Lender> lenders, Double amount) {
 
-        Comparator<Lender> c = Comparator.comparing(Lender::getRate).reversed().thenComparing(Lender::getAvailable).reversed();
-
-        lenders.sort(c);
-
-        for (Lender l : lenders) {
-            System.out.println(l);
-        }
-
-        System.out.println("---------");
-        //List<Lender> completeList = lenders.sort(Comparator.comparing(lender -> lender.getRate()));
-        //return lenders;
+        lenders.sort(Comparator.comparing(Lender::getRate).reversed().thenComparing(Lender::getAvailable).reversed());
 
         List<Lender> availableLenders = new ArrayList<>();
-        Double a1 = amount;
-        for (Lender l : lenders) {
+        for (Lender lender : lenders) {
 
-            if (a1.equals(0.0)) {
+            if (amount.equals(0.0)) {
                 break;
             }
-            if (Objects.equals(l.getAvailable(), a1)) {
-                a1 -= l.getAvailable();
-                availableLenders.add(l);
+            if (Objects.equals(lender.getAvailable(), amount)) {
+                amount -= lender.getAvailable();
+                availableLenders.add(lender);
             }
 
-            if (l.getAvailable() < a1) {
-                a1 -= l.getAvailable();
-                availableLenders.add(l);
+            if (lender.getAvailable() < amount) {
+                amount -= lender.getAvailable();
+                availableLenders.add(lender);
             }
         }
-
-        System.out.println("availableLenders: " + availableLenders);
         return availableLenders;
     }
-
-
 }

@@ -54,7 +54,7 @@ public class RateProcessor {
     }
 
     private Double calculatePercentage(List<Lender> collectedLenders) {
-        return collectedLenders.stream().mapToDouble(i -> i.getRate() * 100).average().orElse(0.0);
+        return collectedLenders.stream().mapToDouble(Lender::getRate).average().orElse(0.0);
     }
 
     private List<Double> collectMonthlyRates(List<Lender> collectedLenders) {
