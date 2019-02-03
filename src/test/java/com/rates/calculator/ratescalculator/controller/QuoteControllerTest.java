@@ -30,9 +30,7 @@ public class QuoteControllerTest {
     public void shouldGetQuotes() {
 
         Quote quote = new Quote(1.00, 0.02, 3.00, 4.00);
-
         when(quoteRepository.findAll()).thenReturn(Flux.just(quote));
-
         List<Quote> received = quoteController.quotes().collectList().block();
 
         assertThat(received.get(0).getRequestedAmount(), is(1.00));
