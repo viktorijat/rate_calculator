@@ -1,16 +1,21 @@
 package com.rates.calculator.ratescalculator.processor;
 
+import com.rates.calculator.ratescalculator.RatesCalculatorApplication;
 import com.rates.calculator.ratescalculator.calculator.FundsFinder;
 import com.rates.calculator.ratescalculator.calculator.RateCalculator;
 import com.rates.calculator.ratescalculator.calculator.RateMethod;
 import com.rates.calculator.ratescalculator.loader.InputRatesLoader;
 import com.rates.calculator.ratescalculator.model.Lender;
 import com.rates.calculator.ratescalculator.model.Quote;
+import com.rates.calculator.ratescalculator.repository.QuoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +44,11 @@ public class RateProcessor {
     @Autowired
     private RateCalculator rateCalculator;
 
+    @Autowired
+    private QuoteRepository quoteRepository;
+
+    private static Logger logger = LoggerFactory.getLogger(RatesCalculatorApplication.class);
+
     public Quote findRateForLoan(String[] args) throws IOException {
 
         if (args.length == 2) {
@@ -50,7 +60,13 @@ public class RateProcessor {
         Double monthly = collectMonthlyRates(collectedLenders).stream().mapToDouble(Double::doubleValue).sum();
         Double averagePercentage = calculatePercentage(collectedLenders);
 
-        return new Quote(requestedAmount, averagePercentage, monthly, periodOfTime * monthly);
+        Quote quote = new Quote(requestedAmount, averagePercentage, monthly, periodOfTime * monthly);
+        saveToRepoAndPrint(quote);
+        return quote;
+    }
+
+    private void saveToRepoAndPrint(Quote quote) {
+        Mono.just(quote).flatMap(quoteRepository::save).subscribe(q -> logger.info("\n" + q.toString()));
     }
 
     private Double calculatePercentage(List<Lender> collectedLenders) {

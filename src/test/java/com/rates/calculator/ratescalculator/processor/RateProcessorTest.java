@@ -5,6 +5,7 @@ import com.rates.calculator.ratescalculator.calculator.RateCalculator;
 import com.rates.calculator.ratescalculator.loader.InputRatesLoader;
 import com.rates.calculator.ratescalculator.model.Lender;
 import com.rates.calculator.ratescalculator.model.Quote;
+import com.rates.calculator.ratescalculator.repository.QuoteRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ public class RateProcessorTest {
     @Mock
     private RateCalculator rateCalculator;
 
+    @Mock
+    private QuoteRepository quoteRepository;
+
     @InjectMocks
     private RateProcessor rateProcessor;
 
@@ -54,6 +59,7 @@ public class RateProcessorTest {
         when(inputRatesLoader.loadLenderRates(any())).thenReturn(lenders);
         when(rateCalculator.calculateRate(any(), any(), any())).thenReturn(30.0);
         when(fundsFinder.findLendersWithEnoughMoney(any(), any())).thenReturn(lenders);
+        when(quoteRepository.save(any())).thenReturn(Mono.empty());
 
         String[] sent = {"1000.0", "lenders.csv"};
         Quote received = rateProcessor.findRateForLoan(sent);
@@ -70,6 +76,7 @@ public class RateProcessorTest {
         when(inputRatesLoader.loadLenderRates(any())).thenReturn(lenders);
         when(rateCalculator.calculateRate(any(), any(), any())).thenReturn(30.0);
         when(fundsFinder.findLendersWithEnoughMoney(any(), any())).thenReturn(lenders);
+        when(quoteRepository.save(any())).thenReturn(Mono.empty());
 
         String[] sent = {};
         Quote received = rateProcessor.findRateForLoan(sent);

@@ -1,12 +1,25 @@
 package com.rates.calculator.ratescalculator.model;
 
 import com.rates.calculator.ratescalculator.model.formater.NumberFormatter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.NumberFormat;
 
+@Document
 public class Quote {
 
+    @Id
+    private String id;
+
+    @NumberFormat(pattern = "#,###,###,###.##")
     private Double requestedAmount;
+
     private Double rate;
+
+    @NumberFormat(pattern = "#,###,###,###.##")
     private Double monthlyRepayment;
+
+    @NumberFormat(pattern = "#,###,###,###.##")
     private Double totalRepayment;
 
     public Quote(Double requestedAmount, Double rate, Double monthlyRepayment, Double totalRepayment) {
