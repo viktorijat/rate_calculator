@@ -11,7 +11,9 @@ public class RateCalculator {
 
     public Double calculateRate(Double sum, Double percentage, String method) {
 
-        if (method.equals(RateMethod.FINANCE_FORMULAS.name())) {
+        if (method.equals(RateMethod.THE_CALCULATOR_SITE.name())) {
+            return theCalculatorSite(sum, percentage);
+        } else if (method.equals(RateMethod.FINANCE_FORMULAS.name())) {
             return financeFormulasCalculator(sum, percentage);
         } else if (method.equals(RateMethod.RATE_1728.name())) {
             return loanForm1728(sum, percentage);
@@ -22,10 +24,19 @@ public class RateCalculator {
     }
 
     /*
+      Rate calculation compound formula as found on
+      https://www.thecalculatorsite.com/articles/finance/compound-interest-formula.php
+   */
+    private Double theCalculatorSite(Double sum, Double percentage) {
+        double compound = 1 + Math.pow((1 + percentage / 12), period);
+        return sum * compound;
+    }
+
+    /*
         Rate calculation formula as suggested from a university economics book
      */
-    private Double economicsBookRateCalculator(Double sum, Double percentage) {
-        double up = sum * percentage + sum;
+    private Double economicsBookRateCalculator(Double sum, Double rate) {
+        double up = sum * rate + sum;
         return up / period;
     }
 
@@ -42,15 +53,15 @@ public class RateCalculator {
     /*
         Rate calculation formula as found on http://www.1728.org/loanform.htm
      */
-    private Double loanForm1728(Double sum, Double percentage) {
-        double down = Math.pow((1 + percentage), period) - 1;
-        return (percentage + (percentage / down)) * sum;
+    private Double loanForm1728(Double sum, Double rate) {
+        double down = Math.pow((1 + rate), period) - 1;
+        return (rate + (rate / down)) * sum;
     }
 
     /*
         Rate calculation formula as found on http://financeformulas.net/Loan_Payment_Formula.html
      */
-    private Double financeFormulasCalculator(Double sum, Double percentage) {
-        return (percentage * sum) / (1 - Math.pow((1 + percentage), -period));
+    private Double financeFormulasCalculator(Double sum, Double rate) {
+        return (rate * sum) / (1 - Math.pow((1 + rate), -period));
     }
 }
