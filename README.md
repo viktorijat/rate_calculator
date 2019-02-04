@@ -1,3 +1,6 @@
+First change the working directory to the project root directory rate_calculator, and then run:
+mvn clean install
+
 To start the application use this command:
 mvn spring-boot:run -Dspring-boot.run.arguments=[sum to be borrowed],[csv file]
 
